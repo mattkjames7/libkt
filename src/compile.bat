@@ -6,12 +6,6 @@ if %ERRORLEVEL% neq 0 (
 	exit /b 6
 )
 
-WHERE /Q gfortran 
-if %ERRORLEVEL% neq 0 (
-	echo GFortran wasn't found 
-	exit /b 7
-)
-
 echo Compiling libkt...
 
 cd magnetopause
@@ -22,29 +16,21 @@ cd model
 call compile.bat
 cd ..
 
-cd spline
-call compile.bat
-cd ..
-
 cd trace
 call compile.bat
 cd ..
 
 
-g++ -fPIC -c -lm -fopenmp -std=c++17 libkt.cc -o libkt.o
+g++ -fPIC -c -lm -fopenmp -std=c++17 -Wextra -O3 libkt.cc -o -o ..\build\libkt.o
 if %ERRORLEVEL% neq 0 (goto CompileError)
 
-g++ -lm -fopenmp -fPIC -std=c++17 -shared -o libkt.dll *.o magnetopause/*.o model/*.o spline/*.o	trace/*.o
+g++ -lm -fopenmp -fPIC -std=c++17 -Wextra -O3 -shared -o libkt.dll  ..\build\*.o ..\lib\libspline\build\*.o
 if %ERRORLEVEL% neq 0 (goto CompileError)
 
 
 echo Done
 
-del *.o
-del magnetopause\*.o
-del model\*.o
-del spline\*.o
-del trace\*.o
+
 exit /b 0
 
 :CompileError
