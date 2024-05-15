@@ -43,7 +43,8 @@ all: spline
 	cd src; make all
 
 spline:
-	cd lib/libspline; make header obj
+	cd lib/libspline; make all
+	cp -v lib/libspline/lib/libspline.* lib/
 
 obj:
 	$(MD) $(BUILDDIR)

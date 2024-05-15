@@ -11,8 +11,10 @@ endif
 
 OS=$(shell uname -s)
 ifeq ($(OS),Linux)
+	LDFLAGS=-lm -lstdc++ -L../lib -lspline -Wl,-rpath='$$ORIGIN/../lib'
 	LIBFILE=libjupitermag.so
 else
+	LDFLAGS=-lm -lstdc++ -L../lib -lspline
 	LIBFILE=libjupitermag.dylib
 endif
 
@@ -21,11 +23,10 @@ all: obj lib
 obj:
 	cd magnetopause; make all
 	cd model; make all
-	cd spline; make all
 	cd trace; make all
 	$(CCo) libkt.cc -o $(BUILDDIR)/libkt.o
 
 lib:
 	$(CC) -shared $(BUILDDIR)/*.o \
-			-o ../lib/$(LIBFILE) 
+			-o ../lib/$(LIBFILE)  $(LDFLAGS)
 	
