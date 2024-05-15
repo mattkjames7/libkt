@@ -1,9 +1,20 @@
 # CFLAGS for CC
-CFLAGS=-lm -fopenmp -fPIC -std=c++17 -g
+CFLAGS=-lm -fopenmp -fPIC -std=c++17 -g -O3 -Wextra
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
 CC=g++ $(CFLAGS)
+
+ifndef BUILDDIR 
+	BUILDDIR=.
+endif
+
+OS=$(shell uname -s)
+ifeq ($(OS),Linux)
+	LIBFILE=libjupitermag.so
+else
+	LIBFILE=libjupitermag.dylib
+endif
 
 all: obj lib
 
@@ -12,21 +23,9 @@ obj:
 	cd model; make all
 	cd spline; make all
 	cd trace; make all
-	$(CCo) libkt.cc -o libkt.o
+	$(CCo) libkt.cc -o $(BUILDDIR)/libkt.o
 
 lib:
-	$(CC) -shared -o libkt.so *.o \
-			magnetopause/*.o \
-			model/*.o \
-			spline/*.o \
-			trace/*.o
+	$(CC) -shared $(BUILDDIR)/*.o \
+			-o ../lib/$(LIBFILE) 
 	
-	rm -v *.o
-	rm -v magnetopause/*.o
-	rm -v model/*.o
-	rm -v spline/*.o
-	rm -v trace/*.o
-
-clean:
-	rm -v *.so
-
