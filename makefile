@@ -90,5 +90,4 @@ endif
 clean:
 	cd lib/libspline; make clean
 	-rm -vfr build
-	cd test; make clean
 	rm -v lib/$(LIBFILE)

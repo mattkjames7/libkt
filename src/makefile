@@ -1,5 +1,5 @@
 # CFLAGS for CC
-CFLAGS=-lm -fopenmp -fPIC -std=c++17 -g -O3 -Wextra
+CFLAGS=-lm -fPIC -std=c++17 -g -O3 -Wextra
 
 # Compiler
 CCo=g++ -c $(CFLAGS)
@@ -12,10 +12,10 @@ endif
 OS=$(shell uname -s)
 ifeq ($(OS),Linux)
 	LDFLAGS=-lm -lstdc++ -L../lib -lspline -Wl,-rpath='$$ORIGIN/../lib'
-	LIBFILE=libjupitermag.so
+	LIBFILE=libkt.so
 else
 	LDFLAGS=-lm -lstdc++ -L../lib -lspline
-	LIBFILE=libjupitermag.dylib
+	LIBFILE=libkt.dylib
 endif
 
 all: obj lib
